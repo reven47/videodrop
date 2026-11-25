@@ -3,6 +3,7 @@
 import { Clock3, Download, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { AdSenseUnit } from "@/components/adsense-unit";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
+import { adsConfig } from "@/lib/ads";
 
 const AD_SECONDS = 30;
 
@@ -19,6 +21,46 @@ interface RewardedAdDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onComplete: () => void;
+}
+
+function RewardHouseCreative({ done }: { done: boolean }) {
+  return (
+    <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400 p-5 text-white">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-white/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-20 -left-10 size-52 rounded-full bg-black/20 blur-3xl"
+      />
+
+      <div className="relative">
+        <div className="flex items-center justify-between">
+          <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold tracking-widest uppercase">
+            Sponsored
+          </span>
+          <Download className="size-5 text-white/80" />
+        </div>
+
+        <div className="mt-10 space-y-1">
+          <p className="text-2xl font-semibold tracking-tight">
+            Download. Watch. Save.
+          </p>
+          <p className="text-sm text-white/80">
+            SnapSave — public posts, straight to your device.
+          </p>
+        </div>
+
+        <div className="mt-8 flex items-center gap-2 text-xs text-white/80">
+          <ShieldCheck className="size-3.5" />
+          {done
+            ? "Ad complete — your download is starting…"
+            : "Keep this page open until the ad finishes."}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function RewardedAdDialog({
@@ -79,40 +121,16 @@ export function RewardedAdDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400 p-5 text-white">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-white/20 blur-3xl"
+        <div className="rounded-xl border bg-muted/40 p-1">
+          <p className="px-1 pt-1 pb-1.5 text-center text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
+            Advertisement
+          </p>
+          <AdSenseUnit
+            slot={adsConfig.slots.reward}
+            minHeight={250}
+            format="rectangle"
+            fallback={<RewardHouseCreative done={done} />}
           />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-20 -left-10 size-52 rounded-full bg-black/20 blur-3xl"
-          />
-
-          <div className="relative">
-            <div className="flex items-center justify-between">
-              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold tracking-widest uppercase">
-                Sponsored
-              </span>
-              <Download className="size-5 text-white/80" />
-            </div>
-
-            <div className="mt-10 space-y-1">
-              <p className="text-2xl font-semibold tracking-tight">
-                Download. Watch. Save.
-              </p>
-              <p className="text-sm text-white/80">
-                SnapSave — public posts, straight to your device.
-              </p>
-            </div>
-
-            <div className="mt-8 flex items-center gap-2 text-xs text-white/80">
-              <ShieldCheck className="size-3.5" />
-              {done
-                ? "Ad complete — your download is starting…"
-                : "Keep this page open until the ad finishes."}
-            </div>
-          </div>
         </div>
 
         <div className="space-y-2">
