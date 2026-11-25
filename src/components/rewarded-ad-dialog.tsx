@@ -67,15 +67,15 @@ export function RewardedAdDialog({
       <DialogContent showCloseButton={false} className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center justify-between gap-3">
-            <DialogTitle>Download unlock karein</DialogTitle>
+            <DialogTitle>Unlock your download</DialogTitle>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground tabular-nums">
               <Clock3 className="size-3.5" />
               {done ? "Ready" : `${remaining}s`}
             </span>
           </div>
           <DialogDescription>
-            Ek chhoti reward ad dekhein — uske baad is post ke saare files
-            download ho jayenge.
+            Watch one short reward ad and every file in this post becomes ready
+            to download.
           </DialogDescription>
         </DialogHeader>
 
@@ -102,15 +102,15 @@ export function RewardedAdDialog({
                 Download. Watch. Save.
               </p>
               <p className="text-sm text-white/80">
-                SnapSave — public posts, seedha aapke device mein.
+                SnapSave — public posts, straight to your device.
               </p>
             </div>
 
             <div className="mt-8 flex items-center gap-2 text-xs text-white/80">
               <ShieldCheck className="size-3.5" />
               {done
-                ? "Ad complete — download shuru ho raha hai…"
-                : "Ad complete hone tak page band na karein."}
+                ? "Ad complete — your download is starting…"
+                : "Keep this page open until the ad finishes."}
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ export function RewardedAdDialog({
         <div className="space-y-2">
           <Progress value={progress} aria-label="Reward ad progress" />
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>{done ? "Unlocked" : "Ad chal rahi hai…"}</span>
+            <span>{done ? "Unlocked" : "Ad playing…"}</span>
             <span className="tabular-nums">{Math.round(progress)}%</span>
           </div>
         </div>

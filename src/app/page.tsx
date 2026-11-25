@@ -1,6 +1,6 @@
 import {
+  Check,
   Download,
-  Instagram,
   Link2,
   LockKeyhole,
   PlayCircle,
@@ -18,47 +18,68 @@ import {
 
 const steps = [
   {
-    title: "Link paste karein",
+    title: "Paste the post link",
     description:
-      "Instagram post ya Facebook photo/video ka public link copy karke upar paste karein.",
+      "Copy the public link of an Instagram post or a Facebook photo, video or reel, then paste it above.",
   },
   {
-    title: "Post fetch karein",
+    title: "We fetch the media",
     description:
-      "Hum available media nikaal kar preview dikhate hain — bina login, bina app.",
+      "We pull the available photo or video and show a preview — no login, no app install.",
   },
   {
-    title: "Ad dekh kar save karein",
+    title: "Watch the ad, then save",
     description:
-      "15-second reward ad ke baad download unlock ho jata hai. Ek ad, poora post.",
+      "A 15-second reward ad unlocks the download. One ad covers every file in that post.",
+  },
+];
+
+const platforms = [
+  {
+    name: "Instagram",
+    supports: [
+      "Public photo posts",
+      "Single-image posts",
+      "Full-resolution image download",
+    ],
+    limits: "Login-gated reels and videos cannot be fetched.",
+  },
+  {
+    name: "Facebook",
+    supports: [
+      "Public photo posts",
+      "Public videos in HD",
+      "Reels and watch links",
+    ],
+    limits: "Private profiles and friends-only posts are not supported.",
   },
 ];
 
 const faqs = [
   {
-    question: "Kya private account ke posts download ho sakte hain?",
+    question: "Can I download posts from private accounts?",
     answer:
-      "Nahi. Sirf public posts hi fetch hoti hain. Hum kisi account mein login nahi karte aur private content access nahi karte.",
+      "No. Only public posts are fetched. We never log in to an account and cannot access private content.",
   },
   {
-    question: "Kya mujhe Instagram ya Facebook login karna padega?",
+    question: "Do I need to log in to Instagram or Facebook?",
     answer:
-      "Nahi. Sirf post ka link chahiye. Login, password ya cookies kabhi nahi maange jaate.",
+      "No. All you need is the post link. We never ask for your password or cookies.",
   },
   {
-    question: "Reward ad kitni lambi hai?",
+    question: "How long is the reward ad?",
     answer:
-      "15 seconds. Ek ad us post ke saare available files unlock karta hai, baar-baar dekhne ki zaroorat nahi.",
+      "15 seconds. One ad unlocks every available file in that post, so you do not have to watch it again.",
   },
   {
-    question: "Kaun se links supported hain?",
+    question: "Which links are supported?",
     answer:
-      "Instagram photo posts aur Facebook public photos, videos aur reels. Kuch Instagram reels/videos login-gated hote hain, isliye woh fetch nahi ho paate.",
+      "Instagram photo posts, and public Facebook photos, videos and reels. Some Instagram reels and videos require a login, so they cannot be fetched.",
   },
   {
-    question: "Kya yeh free hai?",
+    question: "Is it free?",
     answer:
-      "Haan. Koi subscription nahi — bas ek chhoti reward ad, jo site ko chalane mein madad karti hai.",
+      "Yes. There is no subscription — just one short reward ad that helps keep the site running.",
   },
 ];
 
@@ -75,9 +96,7 @@ export default function Home() {
             <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400 text-white shadow-lg shadow-rose-500/20">
               <Download className="size-4" />
             </span>
-            <span className="text-lg font-semibold tracking-tight">
-              PostSave
-            </span>
+            <span className="text-lg font-semibold tracking-tight">PostSave</span>
           </a>
 
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
@@ -85,7 +104,10 @@ export default function Home() {
               href="#how-it-works"
               className="transition-colors hover:text-foreground"
             >
-              Kaise kaam karta hai
+              How it works
+            </a>
+            <a href="#platforms" className="transition-colors hover:text-foreground">
+              Supported
             </a>
             <a href="#faq" className="transition-colors hover:text-foreground">
               FAQ
@@ -108,38 +130,25 @@ export default function Home() {
 
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border bg-background/70 px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
-              <span className="flex items-center gap-1">
-                <Instagram className="size-3.5" />
-                Instagram
-              </span>
+              <span>Instagram</span>
               <span aria-hidden className="text-border">
                 +
               </span>
-              <span className="flex items-center gap-1">
-                <svg
-                  aria-hidden
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-3.5"
-                >
-                  <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33V22c4.78-.76 8.45-4.92 8.45-9.94Z" />
-                </svg>
-                Facebook
-              </span>
+              <span>Facebook</span>
               <span aria-hidden>·</span>
               <span>Public posts</span>
             </div>
 
             <h1 className="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-              Apne favourite posts,{" "}
+              Save your favourite posts,{" "}
               <span className="bg-gradient-to-r from-fuchsia-600 via-rose-500 to-orange-500 bg-clip-text text-transparent dark:from-fuchsia-400 dark:via-rose-400 dark:to-orange-300">
-                seedha apne device mein.
+                straight to your device.
               </span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Instagram ya Facebook ka public link paste karein, 15-second
-              reward ad dekhein, aur photo ya video ek click mein save karein.
+              Pick Instagram or Facebook, paste a public post link, watch one
+              15-second reward ad, and save the photo or video in a click.
             </p>
 
             <div className="mt-8">
@@ -155,10 +164,10 @@ export default function Home() {
           <div className="mx-auto max-w-6xl">
             <div className="max-w-xl">
               <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-                Kaise kaam karta hai
+                How it works
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-                Teen chhote steps. Bas.
+                Three small steps. That is it.
               </h2>
             </div>
 
@@ -182,27 +191,66 @@ export default function Home() {
             <div className="mt-12 grid gap-3 border-t pt-8 text-sm text-muted-foreground sm:grid-cols-3">
               <div className="flex items-center gap-2">
                 <LockKeyhole className="size-4 shrink-0" />
-                Koi login ya password nahi
+                No login or password
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="size-4 shrink-0" />
-                Sirf public content
+                Public content only
               </div>
               <div className="flex items-center gap-2">
                 <PlayCircle className="size-4 shrink-0" />
-                Ek 15-second ad, poora post unlocked
+                One 15-second ad per post
               </div>
             </div>
           </div>
         </section>
 
-        <section id="faq" className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
+        <section id="platforms" className="px-4 py-16 sm:py-20">
+          <div className="mx-auto max-w-5xl">
+            <div className="max-w-xl">
+              <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                Supported
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+                Both platforms, one downloader.
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Switch between Instagram and Facebook with the tabs above — no
+                separate tool, no second account.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {platforms.map((platform) => (
+                <div
+                  key={platform.name}
+                  className="rounded-xl border bg-card p-5"
+                >
+                  <h3 className="text-base font-semibold">{platform.name}</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                    {platform.supports.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <Check className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 border-t pt-3 text-xs leading-relaxed text-muted-foreground">
+                    {platform.limits}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="mx-auto max-w-3xl px-4 pb-16 sm:pb-20">
           <div className="flex items-center gap-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
             <Link2 className="size-3.5" />
             FAQ
           </div>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Aksar poochhe jaane wale sawaal
+            Frequently asked questions
           </h2>
 
           <Accordion type="single" collapsible className="mt-6">
@@ -227,8 +275,8 @@ export default function Home() {
             <span className="text-sm font-semibold">PostSave</span>
           </div>
           <p className="max-w-lg text-xs leading-relaxed text-muted-foreground">
-            Sirf apna content ya jiske liye aapke paas permission ho download
-            karein. Yeh tool Instagram ya Facebook se affiliated nahi hai.
+            Only download your own content or content you have permission to
+            use. This tool is not affiliated with Instagram or Facebook.
           </p>
         </div>
       </footer>

@@ -27,7 +27,7 @@ function isRateLimited(ip: string): boolean {
 export async function POST(request: Request) {
   if (isRateLimited(getClientIp(request))) {
     return NextResponse.json(
-      { error: "Thoda ruk kar try karein. Ek minute mein 20 links tak." },
+      { error: "Slow down a little. Up to 20 links per minute." },
       { status: 429 },
     );
   }
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     body = await request.json();
   } catch {
     return NextResponse.json(
-      { error: "Request samajh nahi aayi. Dobara try karein." },
+      { error: "We could not read that request. Please try again." },
       { status: 400 },
     );
   }
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
   if (typeof url !== "string" || !url.trim()) {
     return NextResponse.json(
-      { error: "Pehle koi Instagram ya Facebook link paste karein." },
+      { error: "Paste an Instagram or Facebook post link to start." },
       { status: 400 },
     );
   }
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "Media fetch nahi ho paya. Post public hai ya nahi check karein, phir dobara try karein.",
+          "Could not fetch the media. Check that the post is public, then try again.",
       },
       { status: 502 },
     );

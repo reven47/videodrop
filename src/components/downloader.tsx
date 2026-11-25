@@ -4,9 +4,7 @@ import {
   CircleAlert,
   ClipboardPaste,
   Download,
-  Facebook,
   ImageIcon,
-  Instagram,
   Link2,
   Loader2,
   Play,
@@ -30,6 +28,26 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MediaItem, Platform, ResolveResult } from "@/lib/media";
 
+const PLATFORMS: {
+  id: Platform;
+  label: string;
+  hint: string;
+  placeholder: string;
+}[] = [
+  {
+    id: "instagram",
+    label: "Instagram",
+    hint: "Works with instagram.com/p/… post links.",
+    placeholder: "https://www.instagram.com/p/…",
+  },
+  {
+    id: "facebook",
+    label: "Facebook",
+    hint: "Works with public facebook.com posts, videos and reels.",
+    placeholder: "https://www.facebook.com/…/videos/…",
+  },
+];
+
 function platformFromInput(value: string): Platform | null {
   const lower = value.toLowerCase();
   if (lower.includes("instagram.com")) return "instagram";
@@ -43,6 +61,32 @@ function platformFromInput(value: string): Platform | null {
   return null;
 }
 
+function InstagramGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      className={className}
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function FacebookGlyph({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33V22c4.78-.76 8.45-4.92 8.45-9.94Z" />
+    </svg>
+  );
+}
+
 function PlatformIcon({
   platform,
   className,
@@ -51,9 +95,9 @@ function PlatformIcon({
   className?: string;
 }) {
   return platform === "instagram" ? (
-    <Instagram className={className} />
+    <InstagramGlyph className={className} />
   ) : (
-    <Facebook className={className} />
+    <FacebookGlyph className={className} />
   );
 }
 
@@ -61,9 +105,7 @@ function MediaPreview({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
   const rawPreview = item.thumbnail ?? item.url;
   const preview =
-    item.type === "video" && rawPreview?.includes("s40x40")
-      ? null
-      : rawPreview;
+    item.type === "video" && rawPreview?.includes("s40x40") ? null : rawPreview;
 
   return (
     <div className="relative size-16 shrink-0 overflow-hidden rounded-lg border bg-gradient-to-br from-fuchsia-500/15 via-rose-500/10 to-orange-400/15">
@@ -98,6 +140,7 @@ function MediaPreview({ item }: { item: MediaItem }) {
 }
 
 export function Downloader() {
+  const [platform, setPlatform] = useState<Platform>("instagram");
   const [url, setUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -108,7 +151,7 @@ export function Downloader() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  const detected = platformFromInput(url);
+  const active = PLATFORMS.find((entry) => entry.id === platform) ?? PLATFORMS[0];
 
   useEffect(() => {
     if (!result) return;
@@ -118,17 +161,26 @@ export function Downloader() {
     return () => window.cancelAnimationFrame(frame);
   }, [result]);
 
+  function applyUrl(value: string) {
+    setUrl(value);
+    if (error) setError(null);
+
+    const detected = platformFromInput(value);
+    if (detected && detected !== platform) {
+      setPlatform(detected);
+    }
+  }
+
   async function handlePaste() {
     try {
       const text = await navigator.clipboard.readText();
       if (!text.trim()) {
-        toast.error("Clipboard khaali hai. Link copy karke paste karein.");
+        toast.error("Your clipboard is empty. Copy a post link first.");
         return;
       }
-      setUrl(text.trim());
-      setError(null);
+      applyUrl(text.trim());
     } catch {
-      toast.error("Clipboard access nahi mila. Link manually paste karein.");
+      toast.error("Clipboard access was blocked. Paste the link manually.");
     }
   }
 
@@ -137,12 +189,22 @@ export function Downloader() {
 
     const value = url.trim();
     if (!value) {
-      setError("Pehle koi Instagram ya Facebook link paste karein.");
+      setError(`Paste an ${active.label} post link to start.`);
       return;
     }
 
-    if (!platformFromInput(value)) {
-      setError("Sirf Instagram ya Facebook ke public links supported hain.");
+    const detected = platformFromInput(value);
+
+    if (!detected) {
+      setError("That link is not from Instagram or Facebook.");
+      return;
+    }
+
+    if (detected !== platform) {
+      setPlatform(detected);
+      setError(
+        `That is a ${detected === "instagram" ? "Instagram" : "Facebook"} link, so we switched the tab for you. Press Download again.`,
+      );
       return;
     }
 
@@ -162,15 +224,13 @@ export function Downloader() {
       const data = (await res.json()) as ResolveResult & { error?: string };
 
       if (!res.ok) {
-        throw new Error(data.error ?? "Media fetch nahi ho paya.");
+        throw new Error(data.error ?? "Could not fetch this post.");
       }
 
       setResult(data);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Kuch galat ho gaya. Dobara try karein.",
+        err instanceof Error ? err.message : "Something went wrong. Try again.",
       );
     } finally {
       setLoading(false);
@@ -194,7 +254,7 @@ export function Downloader() {
     link.click();
     link.remove();
 
-    toast.success("Download shuru ho gaya. Browser ke downloads check karein.");
+    toast.success("Download started. Check your browser downloads.");
     window.setTimeout(() => setDownloadingId(null), 1800);
   }
 
@@ -219,19 +279,49 @@ export function Downloader() {
     <div className="w-full">
       <form onSubmit={handleSubmit} noValidate className="mx-auto w-full max-w-2xl">
         <div className="rounded-2xl border bg-card/90 p-2 shadow-xl shadow-foreground/5 backdrop-blur">
-          <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-1.5">
+          <div
+            role="tablist"
+            aria-label="Choose platform"
+            className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1"
+          >
+            {PLATFORMS.map((entry) => {
+              const selected = entry.id === platform;
+              return (
+                <button
+                  key={entry.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => {
+                    setPlatform(entry.id);
+                    setError(null);
+                  }}
+                  disabled={loading}
+                  className={[
+                    "flex h-10 items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors",
+                    "outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
+                    selected
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground",
+                  ].join(" ")}
+                >
+                  <PlatformIcon platform={entry.id} className="size-4" />
+                  {entry.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between gap-3 px-2 pt-3 pb-1.5">
             <label
               htmlFor="media-url"
-              className="text-xs font-medium text-muted-foreground"
+              className="shrink-0 text-xs font-medium text-muted-foreground"
             >
-              Post ka link
+              {active.label} post link
             </label>
-            {detected && (
-              <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-                <PlatformIcon platform={detected} className="size-3.5" />
-                {detected === "instagram" ? "Instagram" : "Facebook"} detected
-              </span>
-            )}
+            <span className="hidden truncate text-xs text-muted-foreground sm:inline">
+              {active.hint}
+            </span>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -248,11 +338,8 @@ export function Downloader() {
                 autoComplete="off"
                 spellCheck={false}
                 value={url}
-                onChange={(event) => {
-                  setUrl(event.target.value);
-                  if (error) setError(null);
-                }}
-                placeholder="instagram.com/p/… ya facebook.com/…"
+                onChange={(event) => applyUrl(event.target.value)}
+                placeholder={active.placeholder}
                 className="h-12 rounded-xl pr-24 pl-10 text-base shadow-none"
                 aria-invalid={Boolean(error)}
                 disabled={loading}
@@ -332,15 +419,12 @@ export function Downloader() {
               <CardHeader className="border-b">
                 <div className="flex items-start gap-3">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
-                    <PlatformIcon
-                      platform={result.platform}
-                      className="size-5"
-                    />
+                    <PlatformIcon platform={result.platform} className="size-5" />
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <CardTitle className="line-clamp-2 text-base">
-                      {result.title ?? "Post ready hai"}
+                      {result.title ?? "Post ready"}
                     </CardTitle>
                     <CardDescription className="mt-1 truncate">
                       {result.author
@@ -369,7 +453,7 @@ export function Downloader() {
                       <p className="truncate text-sm font-medium">{item.label}</p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
                         {item.type === "video" ? "MP4 video" : "JPG photo"} ·{" "}
-                        {unlocked ? "Ready to save" : "Ad ke baad ready"}
+                        {unlocked ? "Ready to save" : "Locked until the ad ends"}
                       </p>
                     </div>
 
@@ -396,17 +480,17 @@ export function Downloader() {
                             : "Unlock"}
                       </span>
                       <span className="sr-only sm:hidden">
-                        {unlocked ? "Download" : "Ad dekh kar unlock karein"}
+                        {unlocked
+                          ? "Download"
+                          : "Watch an ad to unlock this download"}
                       </span>
                     </Button>
                   </div>
                 ))}
 
                 <p className="text-xs leading-relaxed text-muted-foreground">
-                  {result.note
-                    ? `${result.note} `
-                    : ""}
-                  Ek 15-second ad is post ke saare downloads unlock karta hai.
+                  {result.note ? `${result.note} ` : ""}
+                  One 15-second ad unlocks every file in this post.
                 </p>
               </CardContent>
             </Card>

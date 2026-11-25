@@ -61,26 +61,26 @@ export async function GET(request: Request) {
       },
     });
   } catch {
-    return new Response("Media server se connect nahi ho paya.", {
+    return new Response("Could not connect to the media server.", {
       status: 502,
     });
   }
 
   if (!upstream.ok || !upstream.body) {
-    return new Response("Media link expire ho gaya. Post dobara resolve karein.", {
+    return new Response("This media link expired. Fetch the post again.", {
       status: 502,
     });
   }
 
   if (!isAllowedMediaUrl(upstream.url)) {
-    return new Response("Media link allowed nahi hai.", { status: 400 });
+    return new Response("That media link is not allowed.", { status: 400 });
   }
 
   const contentType =
     upstream.headers.get("content-type") ?? "application/octet-stream";
 
   if (contentType.includes("text/html")) {
-    return new Response("Media link expire ho gaya. Post dobara resolve karein.", {
+    return new Response("This media link expired. Fetch the post again.", {
       status: 502,
     });
   }

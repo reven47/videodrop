@@ -59,18 +59,18 @@ export function detectPlatform(rawInput: string): {
   const input = rawInput.trim();
 
   if (!input) {
-    throw new ResolveError("Pehle koi Instagram ya Facebook link paste karein.", 400);
+    throw new ResolveError("Paste an Instagram or Facebook post link to start.", 400);
   }
 
   let url: URL;
   try {
     url = new URL(/^https?:\/\//i.test(input) ? input : `https://${input}`);
   } catch {
-    throw new ResolveError("Yeh valid link nahi lag raha. Poora post URL paste karein.", 400);
+    throw new ResolveError("That does not look like a valid link. Paste the full post URL.", 400);
   }
 
   if (url.protocol !== "https:" && url.protocol !== "http:") {
-    throw new ResolveError("Sirf http ya https links supported hain.", 400);
+    throw new ResolveError("Only http and https links are supported.", 400);
   }
 
   const host = url.hostname.toLowerCase();
@@ -78,7 +78,7 @@ export function detectPlatform(rawInput: string): {
   if (INSTAGRAM_HOSTS.has(host)) {
     if (!/\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/.test(url.pathname)) {
       throw new ResolveError(
-        "Instagram ka post, reel ya TV link paste karein — jaise instagram.com/p/…",
+        "Paste an Instagram post, reel or TV link, for example instagram.com/p/…",
         400,
       );
     }
@@ -90,7 +90,7 @@ export function detectPlatform(rawInput: string): {
   }
 
   throw new ResolveError(
-    "Sirf Instagram ya Facebook ke public links supported hain.",
+    "Only public Instagram and Facebook links are supported.",
     400,
   );
 }
@@ -342,7 +342,7 @@ async function resolveInstagram(url: URL): Promise<ResolveResult> {
   const match = url.pathname.match(/\/(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
   if (!match) {
     throw new ResolveError(
-      "Instagram ka post, reel ya TV link paste karein — jaise instagram.com/p/…",
+      "Paste an Instagram post, reel or TV link, for example instagram.com/p/…",
       400,
     );
   }
@@ -355,7 +355,7 @@ async function resolveInstagram(url: URL): Promise<ResolveResult> {
 
   if (!oembed) {
     throw new ResolveError(
-      "Yeh post nahi mil raha. Check karein ki post public hai aur link sahi hai.",
+      "We could not find this post. Check that the link is correct and the post is public.",
     );
   }
 
@@ -396,21 +396,21 @@ async function resolveInstagram(url: URL): Promise<ResolveResult> {
 
     if (isReel || instagramDeclaresVideo(embedHtml)) {
       throw new ResolveError(
-        "Yeh reel/video Instagram par login ke bina available nahi hai. Filhaal public photo posts download ho sakti hain.",
+        "This Instagram reel or video is not available without logging in. Public photo posts can still be downloaded.",
       );
     }
   }
 
   if (isReel) {
     throw new ResolveError(
-      "Yeh reel Instagram par login ke bina available nahi hai. Filhaal public photo posts download ho sakti hain.",
+      "This Instagram reel is not available without logging in. Public photo posts can still be downloaded.",
     );
   }
 
   const imageUrl = fullImage ?? thumbnail;
   if (!imageUrl) {
     throw new ResolveError(
-      "Is post ka media nahi mil raha. Post public hai ya nahi, check karein.",
+      "No media was found for this post. Check that the post is public.",
     );
   }
 
@@ -425,7 +425,7 @@ async function resolveInstagram(url: URL): Promise<ResolveResult> {
         label: "Photo",
       },
     ],
-    note: "Carousel post ho to pehla photo download hota hai.",
+    note: "For carousel posts, the first photo is downloaded.",
   };
 }
 
@@ -509,7 +509,7 @@ async function resolveFacebook(url: URL): Promise<ResolveResult> {
 
   if (!html) {
     throw new ResolveError(
-      "Facebook ne is post ka data nahi diya. Post public hai ya nahi, check karein.",
+      "Facebook did not return data for this post. Check that the post is public.",
     );
   }
 
@@ -561,8 +561,8 @@ async function resolveFacebook(url: URL): Promise<ResolveResult> {
 
   throw new ResolveError(
     wantsVideo
-      ? "Yeh Facebook video nahi mil rahi. Public video ya reel ka link try karein."
-      : "Is post ka media nahi mila. Public photo ya video post ka link try karein.",
+      ? "This Facebook video could not be found. Try a public video or reel link."
+      : "No media was found for this post. Try a public photo or video post.",
   );
 }
 
