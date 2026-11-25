@@ -490,7 +490,7 @@ export function Downloader() {
 
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   {result.note ? `${result.note} ` : ""}
-                  One 15-second ad unlocks every file in this post.
+                  One 30-second ad unlocks every file in this post.
                 </p>
               </CardContent>
             </Card>

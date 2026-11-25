@@ -7,6 +7,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { AdSlot } from "@/components/ad-slot";
 import { Downloader } from "@/components/downloader";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
@@ -30,7 +31,7 @@ const steps = [
   {
     title: "Watch the ad, then save",
     description:
-      "A 15-second reward ad unlocks the download. One ad covers every file in that post.",
+      "A 30-second reward ad unlocks the download. One ad covers every file in that post.",
   },
 ];
 
@@ -69,7 +70,7 @@ const faqs = [
   {
     question: "How long is the reward ad?",
     answer:
-      "15 seconds. One ad unlocks every available file in that post, so you do not have to watch it again.",
+      "30 seconds. One ad unlocks every available file in that post, so you do not have to watch it again.",
   },
   {
     question: "Which links are supported?",
@@ -148,7 +149,7 @@ export default function Home() {
 
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Pick Instagram or Facebook, paste a public post link, watch one
-              15-second reward ad, and save the photo or video in a click.
+              30-second reward ad, and save the photo or video in a click.
             </p>
 
             <div className="mt-8">
@@ -156,6 +157,10 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <div className="px-4 pb-14 sm:pb-16">
+          <AdSlot variant="leaderboard" />
+        </div>
 
         <section
           id="how-it-works"
@@ -199,7 +204,7 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-2">
                 <PlayCircle className="size-4 shrink-0" />
-                One 15-second ad per post
+                One 30-second ad per post
               </div>
             </div>
           </div>
@@ -244,7 +249,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="faq" className="mx-auto max-w-3xl px-4 pb-16 sm:pb-20">
+        <div className="border-t bg-muted/30 px-4 py-12 sm:py-14">
+          <AdSlot variant="rectangle" />
+        </div>
+
+        <section id="faq" className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
           <div className="flex items-center gap-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
             <Link2 className="size-3.5" />
             FAQ
@@ -265,6 +274,10 @@ export default function Home() {
           </Accordion>
         </section>
       </main>
+
+      <div className="border-t px-4 py-10 sm:py-12">
+        <AdSlot variant="inline" />
+      </div>
 
       <footer className="border-t px-4 py-8">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 
-const AD_SECONDS = 15;
+const AD_SECONDS = 30;
 
 interface RewardedAdDialogProps {
   open: boolean;
@@ -74,8 +74,8 @@ export function RewardedAdDialog({
             </span>
           </div>
           <DialogDescription>
-            Watch one short reward ad and every file in this post becomes ready
-            to download.
+            Watch one 30-second reward ad and every file in this post becomes
+            ready to download.
           </DialogDescription>
         </DialogHeader>
 

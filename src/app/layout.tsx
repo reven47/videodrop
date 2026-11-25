@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "PostSave — Instagram & Facebook post downloader",
   description:
-    "Download public Instagram and Facebook posts in one click. Paste a link, watch one 15-second reward ad, and save the photo or video — no login needed.",
+    "Download public Instagram and Facebook posts in one click. Paste a link, watch one 30-second reward ad, and save the photo or video — no login needed.",
 };
 
 export default function RootLayout({
