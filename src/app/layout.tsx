@@ -29,6 +29,7 @@ export const metadata: Metadata = {
   description:
     "VideoDrop downloads public Instagram and Facebook photos and videos in one click. Paste a link, watch one 30-second reward ad, and save the file — no login needed.",
   applicationName: "VideoDrop",
+  alternates: { canonical: "/" },
   keywords: [
     "Instagram downloader",
     "Facebook video downloader",
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
     "public post downloader",
   ],
   openGraph: {
+    url: "/",
     title: "VideoDrop — Instagram & Facebook post downloader",
     description:
       "Save public Instagram and Facebook photos and videos in one click, with no login.",
