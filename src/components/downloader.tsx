@@ -292,13 +292,13 @@ export function Downloader() {
                   type="button"
                   role="tab"
                   aria-selected={selected}
+                  aria-controls="media-url"
                   onClick={() => {
                     setPlatform(entry.id);
                     setError(null);
                   }}
-                  disabled={loading}
                   className={[
-                    "flex h-10 items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors",
+                    "flex h-10 cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors select-none",
                     "outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50",
                     selected
                       ? "bg-background text-foreground shadow-sm"
