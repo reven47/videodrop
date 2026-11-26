@@ -18,6 +18,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    (process.env.NEXT_PUBLIC_SITE_URL ?? "").trim() ||
+      "https://videodrop-vert.vercel.app",
+  ),
   title: {
     default: "VideoDrop — Instagram & Facebook post downloader",
     template: "%s — VideoDrop",

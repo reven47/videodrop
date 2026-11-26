@@ -118,3 +118,6 @@ $RECYCLE.BIN/
 
 # source export archives
 videodrop-source-*.tar.gz
+.env*
+
+!.env.example
