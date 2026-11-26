@@ -115,3 +115,6 @@ $RECYCLE.BIN/
 .ideavo/project
 # next-agents-md
 .next-docs/
+
+# source export archives
+videodrop-source-*.tar.gz
