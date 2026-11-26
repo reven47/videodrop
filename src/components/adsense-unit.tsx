@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { adsConfig } from "@/lib/ads";
+import { adsConfig, adsEnabled } from "@/lib/ads";
 import { cn } from "@/lib/utils";
 
 declare global {
@@ -28,11 +28,11 @@ export function AdSenseUnit({
 }) {
   const insRef = useRef<HTMLModElement>(null);
   const [status, setStatus] = useState<Status>(
-    adsConfig.client && slot ? "pending" : "failed",
+    adsEnabled && slot ? "pending" : "failed",
   );
 
   useEffect(() => {
-    if (!adsConfig.client || !slot) {
+    if (!adsEnabled || !adsConfig.client || !slot) {
       setStatus("failed");
       return;
     }

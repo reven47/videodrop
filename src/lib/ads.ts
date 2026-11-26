@@ -1,4 +1,5 @@
 const rawClient = (process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? "").trim();
+const rawEnabled = (process.env.NEXT_PUBLIC_ADS_ENABLED ?? "").trim();
 
 function slot(name: string): string {
   return (process.env[name] ?? "").trim();
@@ -15,6 +16,7 @@ function httpsUrl(value: string): string {
 }
 
 export const adsConfig = {
+  enabled: rawEnabled === "true",
   client: /^ca-pub-\d{10,}$/.test(rawClient) ? rawClient : "",
   slots: {
     top: slot("NEXT_PUBLIC_ADSENSE_SLOT_TOP"),
@@ -25,7 +27,7 @@ export const adsConfig = {
   rewardVastTag: httpsUrl(slot("NEXT_PUBLIC_REWARD_VAST_TAG")),
 };
 
-export const adsEnabled = Boolean(adsConfig.client);
+export const adsEnabled = adsConfig.enabled && Boolean(adsConfig.client);
 
 export function hasSlot(name: keyof typeof adsConfig.slots): boolean {
   return adsEnabled && Boolean(adsConfig.slots[name]);

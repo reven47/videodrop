@@ -44,7 +44,7 @@ async function fetchVastDocument(tagUrl: string): Promise<string> {
     signal: AbortSignal.timeout(12_000),
     headers: {
       Accept: "application/xml,text/xml,*/*",
-      "User-Agent": "PostSave/1.0 (+reward-ad)",
+      "User-Agent": "VideoDrop/1.0 (+reward-ad)",
     },
   });
 

@@ -5,7 +5,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
-import { adsConfig } from "@/lib/ads";
+import { adsConfig, adsEnabled } from "@/lib/ads";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,9 +18,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PostSave — Instagram & Facebook post downloader",
+  title: {
+    default: "VideoDrop — Instagram & Facebook post downloader",
+    template: "%s — VideoDrop",
+  },
   description:
-    "Download public Instagram and Facebook posts in one click. Paste a link, watch one 30-second reward ad, and save the photo or video — no login needed.",
+    "VideoDrop downloads public Instagram and Facebook photos and videos in one click. Paste a link, watch one 30-second reward ad, and save the file — no login needed.",
+  applicationName: "VideoDrop",
+  keywords: [
+    "Instagram downloader",
+    "Facebook video downloader",
+    "download Instagram photo",
+    "save Facebook reel",
+    "public post downloader",
+  ],
+  openGraph: {
+    title: "VideoDrop — Instagram & Facebook post downloader",
+    description:
+      "Save public Instagram and Facebook photos and videos in one click, with no login.",
+    siteName: "VideoDrop",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VideoDrop — Instagram & Facebook post downloader",
+    description:
+      "Save public Instagram and Facebook photos and videos in one click, with no login.",
+  },
 };
 
 export default function RootLayout({
@@ -46,7 +70,7 @@ export default function RootLayout({
         </ThemeProvider>
         {/* WARNING FOR AGENT: DO NOT REMOVE THIS SCRIPT */}
         <Script src="https://cdn.jsdelivr.net/gh/IdeavoAI/ideavo-scripts@latest/scripts/ideavo.min.js" />
-        {adsConfig.client ? (
+        {adsEnabled && adsConfig.client ? (
           <Script
             id="adsense-script"
             async

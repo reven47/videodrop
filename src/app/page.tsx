@@ -1,15 +1,9 @@
-import {
-  Check,
-  Download,
-  Link2,
-  LockKeyhole,
-  PlayCircle,
-  ShieldCheck,
-} from "lucide-react";
+import { Check, Link2, LockKeyhole, PlayCircle, ShieldCheck } from "lucide-react";
 
 import { AdSlot } from "@/components/ad-slot";
 import { Downloader } from "@/components/downloader";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import {
   Accordion,
   AccordionContent,
@@ -87,37 +81,7 @@ const faqs = [
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4">
-          <a
-            href="#top"
-            className="flex items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="PostSave home"
-          >
-            <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400 text-white shadow-lg shadow-rose-500/20">
-              <Download className="size-4" />
-            </span>
-            <span className="text-lg font-semibold tracking-tight">PostSave</span>
-          </a>
-
-          <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
-            <a
-              href="#how-it-works"
-              className="transition-colors hover:text-foreground"
-            >
-              How it works
-            </a>
-            <a href="#platforms" className="transition-colors hover:text-foreground">
-              Supported
-            </a>
-            <a href="#faq" className="transition-colors hover:text-foreground">
-              FAQ
-            </a>
-          </nav>
-
-          <ThemeToggle />
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="top" className="flex-1">
         <section className="relative isolate overflow-hidden px-4 pt-14 pb-16 sm:pt-20 sm:pb-20">
@@ -279,20 +243,7 @@ export default function Home() {
         <AdSlot variant="inline" />
       </div>
 
-      <footer className="border-t px-4 py-8">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-fuchsia-500 via-rose-500 to-orange-400 text-white">
-              <Download className="size-3.5" />
-            </span>
-            <span className="text-sm font-semibold">PostSave</span>
-          </div>
-          <p className="max-w-lg text-xs leading-relaxed text-muted-foreground">
-            Only download your own content or content you have permission to
-            use. This tool is not affiliated with Instagram or Facebook.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

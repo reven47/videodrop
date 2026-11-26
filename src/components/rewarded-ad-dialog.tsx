@@ -73,7 +73,7 @@ function HouseCreative({ done }: { done: boolean }) {
             Download. Watch. Save.
           </p>
           <p className="text-sm text-white/80">
-            SnapSave — public posts, straight to your device.
+            VideoDrop — public posts, straight to your device.
           </p>
         </div>
 
